@@ -4,6 +4,7 @@
 import Stripe from "stripe";
 import { priceOrder } from "@/lib/order-pricing";
 import { cartToMetadata } from "@/lib/order-fulfillment";
+import { createClient } from "@/lib/supabase/server";
 
 // A real name: letters/spaces/.'- only (no digits), 2+ letters.
 function isValidName(name) {
@@ -48,6 +49,14 @@ export async function POST(req) {
       return Response.json({ error: e.message }, { status: 400 });
     }
 
+    // If the shopper is signed in, remember their id so the saved order can be
+    // attached to their account (powers /account order history). Anonymous
+    // checkout still works — user_id just stays null.
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const origin = req.headers.get("origin") || new URL(req.url).origin;
 
@@ -80,7 +89,10 @@ export async function POST(req) {
       // the order reliably even if the customer never returns to the site.
       metadata: cartToMetadata(
         priced.lines.map((l) => ({ id: l.id, quantity: l.quantity })),
-        { customer_name: String(name).trim().slice(0, 200) }
+        {
+          customer_name: String(name).trim().slice(0, 200),
+          ...(user ? { user_id: user.id } : {}),
+        }
       ),
       // Use the validated email — Stripe pre-fills it and sends the receipt here.
       customer_email: String(email).trim(),

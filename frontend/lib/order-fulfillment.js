@@ -122,10 +122,15 @@ export async function saveOrderFromSession(session, opts = {}) {
     );
   }
 
+  // Attach the order to a customer account when checkout stashed the user id in
+  // the session metadata (anonymous checkout leaves this null).
+  const userId = session.metadata?.user_id || null;
+
   // Insert the order.
   const { data: order, error: orderError } = await admin
     .from("orders")
     .insert({
+      user_id: userId,
       customer_name: customerName,
       phone,
       address,

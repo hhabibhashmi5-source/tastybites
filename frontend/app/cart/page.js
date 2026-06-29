@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Minus, Plus, Trash2, CheckCircle2, Loader2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { isRealName, NAME_ERROR } from "@/lib/validate-name";
+import { createClient } from "@/lib/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -75,6 +76,34 @@ export default function CartPage() {
       window.history.replaceState({}, "", "/cart");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Prefill name + email from the signed-in customer's profile, if any. Never
+  // clobbers what the shopper has already typed. (Phone + delivery address are
+  // still collected by Stripe Checkout, so they aren't prefilled here.)
+  useEffect(() => {
+    const supabase = createClient();
+    let active = true;
+    (async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user || !active) return;
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (!active) return;
+      setForm((f) => ({
+        ...f,
+        name: f.name || profile?.full_name || "",
+        email: f.email || user.email || "",
+      }));
+    })();
+    return () => {
+      active = false;
+    };
   }, []);
 
   function update(field) {

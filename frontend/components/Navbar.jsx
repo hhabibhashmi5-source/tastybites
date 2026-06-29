@@ -12,6 +12,7 @@ const LINKS = [
   ["Menu", "/menu"],
   ["Order", "/cart"],
   ["Contact", "/contact"],
+  ["Account", "/account"],
   ["Admin", "/admin"],
 ];
 
