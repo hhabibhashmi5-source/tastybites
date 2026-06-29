@@ -1,0 +1,15 @@
+{
+  "name": "haroon-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Standalone database toolkit for the TastyBites Supabase database (schema, migrations, scripts).",
+  "scripts": {
+    "migrate": "node scripts/migrate.js",
+    "query": "node scripts/query.js",
+    "ping": "node scripts/ping.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "pg": "^8.13.1"
+  }
+}

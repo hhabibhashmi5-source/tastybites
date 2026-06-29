@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(\"`n--- frontend/ ---\")",
+      "PowerShell($root=\"C:\\\\Users\\\\Harron\\\\Downloads\\\\haroon\\\\frontend\"; Write-Output \"=== migrations ===\"; Get-ChildItem \"$root\\\\supabase\\\\migrations\" -File | Select Name; Write-Output \"=== components/account ===\"; Get-ChildItem \"$root\\\\components\\\\account\" -File -ErrorAction SilentlyContinue | Select Name; Write-Output \"=== app/account ===\"; Get-ChildItem \"$root\\\\app\\\\account\" -Recurse -File -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName.Replace\\($root,''\\) }; Write-Output \"=== app top ===\"; Get-ChildItem \"$root\\\\app\" -Force | Select Name)",
+      "PowerShell(Set-Location \"C:\\\\Users\\\\Harron\\\\Downloads\\\\haroon\\\\frontend\"; $machine = [Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\); $user = [Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); $env:Path = \"$machine;$user\"; npm install --save-dev pg --silent 2>&1 | Select-Object -Last 3; Write-Output \"--- migrate ---\"; npm run db:migrate)",
+      "PowerShell(Set-Location \"C:\\\\Users\\\\Harron\\\\Downloads\\\\haroon\\\\frontend\"; $machine = [Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\); $user = [Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); $env:Path = \"$machine;$user\"; npm run db:migrate)"
+    ]
+  }
+}

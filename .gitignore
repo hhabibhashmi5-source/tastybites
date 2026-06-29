@@ -1,0 +1,28 @@
+# ── Secrets — NEVER commit these ───────────────────────────────
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+*password*.txt
+**/supabase. data base password.txt
+
+# ── Dependencies / build output ────────────────────────────────
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+/out/
+/build/
+*.tsbuildinfo
+
+# ── Large local tools / binaries (don't belong in the repo) ────
+**/ngrok-v3-stable-windows-amd64/
+*.exe
+
+# ── Editor / OS / misc ─────────────────────────────────────────
+.DS_Store
+*.pem
+npm-debug.log*
+.vercel
+.netlify

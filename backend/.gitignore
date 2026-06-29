@@ -1,0 +1,8 @@
+# Secrets — NEVER commit these
+.env
+.env.local
+*.password.txt
+
+# Node
+node_modules/
+npm-debug.log*
