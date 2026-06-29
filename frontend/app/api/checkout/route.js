@@ -3,6 +3,7 @@
 // (never trusted from the browser). The secret key never leaves the server.
 import Stripe from "stripe";
 import { priceOrder } from "@/lib/order-pricing";
+import { cartToMetadata } from "@/lib/order-fulfillment";
 
 // A real name: letters/spaces/.'- only (no digits), 2+ letters.
 function isValidName(name) {
@@ -75,6 +76,12 @@ export async function POST(req) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items,
+      // Stash the validated cart + name on the session so the webhook can save
+      // the order reliably even if the customer never returns to the site.
+      metadata: cartToMetadata(
+        priced.lines.map((l) => ({ id: l.id, quantity: l.quantity })),
+        { customer_name: String(name).trim().slice(0, 200) }
+      ),
       // Use the validated email — Stripe pre-fills it and sends the receipt here.
       customer_email: String(email).trim(),
       // Collect full billing details (name + address) alongside the card.

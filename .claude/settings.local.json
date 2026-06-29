@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell($ng = \"c:\\\\Users\\\\Harron\\\\Downloads\\\\haroon\\\\frontend\\\\ngrok-v3-stable-windows-amd64\\\\ngrok.exe\"; & $ng http 3000 --log=stdout)"
+      "PowerShell($ng = \"c:\\\\Users\\\\Harron\\\\Downloads\\\\haroon\\\\frontend\\\\ngrok-v3-stable-windows-amd64\\\\ngrok.exe\"; & $ng http 3000 --log=stdout)",
+      "Bash(npm run *)"
     ]
   }
 }
